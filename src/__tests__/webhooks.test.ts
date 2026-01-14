@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { createHmac } from "node:crypto";
 import {
   verifyWebhookSignature,
   constructEvent,
@@ -13,34 +14,20 @@ describe("Webhook Signature Verification", () => {
     data: { videoId: "vid123" },
   });
 
-  // Helper to compute expected signature
-  async function computeSignature(
+  // Helper to compute expected signature using Node.js crypto
+  function computeSignature(
     payload: string,
     timestamp: number,
     secret: string
-  ): Promise<string> {
+  ): string {
     const signedPayload = `${timestamp}.${payload}`;
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(secret);
-    const messageData = encoder.encode(signedPayload);
-
-    const cryptoKey = await crypto.subtle.importKey(
-      "raw",
-      keyData,
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"]
-    );
-
-    const signature = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
-    const hashArray = Array.from(new Uint8Array(signature));
-    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    return createHmac("sha256", secret).update(signedPayload).digest("hex");
   }
 
   describe("verifyWebhookSignature", () => {
     it("should verify a valid signature", async () => {
       const timestamp = Date.now();
-      const sig = await computeSignature(payload, timestamp, secret);
+      const sig = computeSignature(payload, timestamp, secret);
 
       const result = await verifyWebhookSignature(
         payload,
@@ -54,7 +41,7 @@ describe("Webhook Signature Verification", () => {
 
     it("should verify signature with string timestamp", async () => {
       const timestamp = Date.now();
-      const sig = await computeSignature(payload, timestamp, secret);
+      const sig = computeSignature(payload, timestamp, secret);
 
       const result = await verifyWebhookSignature(
         payload,
@@ -142,7 +129,7 @@ describe("Webhook Signature Verification", () => {
 
     it("should accept custom tolerance", async () => {
       const timestamp = Date.now() - 500 * 1000; // 500 seconds ago
-      const sig = await computeSignature(payload, timestamp, secret);
+      const sig = computeSignature(payload, timestamp, secret);
 
       // Should fail with 5 minute tolerance
       await expect(
@@ -191,7 +178,7 @@ describe("Webhook Signature Verification", () => {
 
     it("should throw on tampered payload", async () => {
       const timestamp = Date.now();
-      const sig = await computeSignature(payload, timestamp, secret);
+      const sig = computeSignature(payload, timestamp, secret);
 
       const tamperedPayload = JSON.stringify({
         event: "video.completed",
@@ -210,7 +197,7 @@ describe("Webhook Signature Verification", () => {
 
     it("should throw on wrong secret", async () => {
       const timestamp = Date.now();
-      const sig = await computeSignature(payload, timestamp, secret);
+      const sig = computeSignature(payload, timestamp, secret);
 
       await expect(
         verifyWebhookSignature(
