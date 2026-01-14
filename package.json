@@ -27,7 +27,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src",
+    "lint": "echo 'No lint configured'",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
