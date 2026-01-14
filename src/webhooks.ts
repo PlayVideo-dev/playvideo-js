@@ -102,9 +102,17 @@ export async function constructEvent(
 
 /**
  * Compute HMAC-SHA256 signature
+ * Works in both Node.js and browser environments
  */
 async function computeHmacSha256(message: string, secret: string): Promise<string> {
-  // Use Web Crypto API (available in Node 18+ and browsers)
+  // Check if we're in Node.js environment
+  if (typeof globalThis.crypto?.subtle === "undefined") {
+    // Use Node.js crypto module
+    const { createHmac } = await import("node:crypto");
+    return createHmac("sha256", secret).update(message).digest("hex");
+  }
+
+  // Use Web Crypto API (browsers and Deno)
   const encoder = new TextEncoder();
   const keyData = encoder.encode(secret);
   const messageData = encoder.encode(message);
