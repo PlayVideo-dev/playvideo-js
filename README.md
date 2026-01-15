@@ -1,8 +1,8 @@
 # PlayVideo SDK for JavaScript/TypeScript
 
 [![CI](https://github.com/PlayVideo-dev/playvideo-js/actions/workflows/ci.yml/badge.svg)](https://github.com/PlayVideo-dev/playvideo-js/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/playvideo.svg)](https://www.npmjs.com/package/playvideo)
-[![npm downloads](https://img.shields.io/npm/dm/playvideo.svg)](https://www.npmjs.com/package/playvideo)
+[![npm version](https://img.shields.io/npm/v/@playvideo/playvideo-sdk.svg)](https://www.npmjs.com/package/@playvideo/playvideo-sdk)
+[![npm downloads](https://img.shields.io/npm/dm/@playvideo/playvideo-sdk.svg)](https://www.npmjs.com/package/@playvideo/playvideo-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Official JavaScript/TypeScript SDK for the [PlayVideo](https://playvideo.dev) API - Video hosting for developers.
@@ -10,11 +10,11 @@ Official JavaScript/TypeScript SDK for the [PlayVideo](https://playvideo.dev) AP
 ## Installation
 
 ```bash
-npm install playvideo
+npm install @playvideo/playvideo-sdk
 # or
-yarn add playvideo
+yarn add @playvideo/playvideo-sdk
 # or
-pnpm add playvideo
+pnpm add @playvideo/playvideo-sdk
 ```
 
 **Requirements:** Node.js 18+ or modern browser with native `fetch` support.
@@ -22,7 +22,7 @@ pnpm add playvideo
 ## Quick Start
 
 ```typescript
-import PlayVideo from 'playvideo';
+import PlayVideo from '@playvideo/playvideo-sdk';
 
 const client = new PlayVideo('play_live_xxx');
 

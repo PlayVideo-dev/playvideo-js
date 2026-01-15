@@ -1,10 +1,14 @@
 {
-  "name": "playvideo",
+  "name": "@playvideo/playvideo-sdk",
   "version": "1.0.0",
+  "type": "module",
   "description": "Official PlayVideo SDK for JavaScript/TypeScript - Video hosting for developers",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
